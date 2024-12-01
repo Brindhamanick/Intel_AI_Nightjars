@@ -248,7 +248,7 @@ def load_openvino_model(model_dir, device):
     Loads and integrates YOLO with OpenVINO for object detection.
     """
     # Define paths to OpenVINO files
-    det_model_path = Path(model_dir) / "yolov8xcdark.xml"  # Adjust the filename if necessary
+    det_model_path = Path(model_dir) / "yolovc8xdark.xml"  # Adjust the filename if necessary
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
@@ -271,7 +271,7 @@ st.write("This app demonstrates object detection using YOLOv8 with OpenVINO opti
 device = "CPU"  # Change to "GPU" or "AUTO" if applicable
 
 # Paths to the pre-exported OpenVINO models
-det_model_path = Path("yolov8xcdark_openvino_model")
+det_model_path = Path("yolovc8x_openvino_model")
 
 # Validate folder existence
 if not det_model_path.exists():
