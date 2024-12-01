@@ -220,13 +220,15 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
 st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="detective.ico")
 st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
 
-
 # Global OpenVINO core instance
 core = ov.Core()
 
 # Function to compile OpenVINO models
 @st.cache_resource
 def compile_model(det_model_path, device):
+    """
+    Compiles the OpenVINO model using the specified device.
+    """
     det_ov_model = core.read_model(det_model_path)
 
     # OpenVINO configuration
@@ -242,8 +244,11 @@ def compile_model(det_model_path, device):
 # Function to load YOLO model and integrate OpenVINO
 @st.cache_resource
 def load_openvino_model(model_dir, device):
+    """
+    Loads and integrates YOLO with OpenVINO for object detection.
+    """
     # Define paths to OpenVINO files
-    det_model_path = Path(model_dir) / "yolovc8x.xml"  # Adjust for your actual file name if necessary
+    det_model_path = Path(model_dir) / "yolov8xcdark.xml"  # Adjust the filename if necessary
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
@@ -257,16 +262,28 @@ def load_openvino_model(model_dir, device):
 
     det_model.predictor.model.ov_compiled_model = compiled_model
     return det_model
-    
+
+# Streamlit Application
+st.title("Object Detection with YOLOv8 and OpenVINO")
+st.write("This app demonstrates object detection using YOLOv8 with OpenVINO optimization.")
 
 # Specify device
-device = "CPU"  # Change as per your environment: "GPU", "AUTO", etc.
+device = "CPU"  # Change to "GPU" or "AUTO" if applicable
 
 # Paths to the pre-exported OpenVINO models
 det_model_path = Path("yolov8xcdark_openvino_model")
 
-# Load the compiled models
-model = load_openvino_model(det_model_path, device)
+# Validate folder existence
+if not det_model_path.exists():
+    st.error(f"The specified folder '{det_model_path}' does not exist. Please ensure it is correctly placed.")
+else:
+    # Load the compiled model
+    with st.spinner("Loading the model. Please wait..."):
+        model = load_openvino_model(det_model_path, device)
+        st.success("Model loaded successfully!")
+
+    # Display further instructions or interact with the model
+    st.write("The model is ready for inference. You can now upload an image or video for detection.")
 
 # model1 = load_openvino_model(Path(model_seg_dir) / "model.xml", device)
 
