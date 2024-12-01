@@ -222,7 +222,7 @@ import streamlit as st
 device = "CPU"  # Change to "GPU" or "AUTO" based on your environment
 
 # Folder containing OpenVINO model
-model_dir = "yolovc8x_openvino_model"
+model_dir = "./yolovc8x_openvino_model"
 
 # Check model file paths
 det_model_path = Path(model_dir) / "yolovc8x.xml"  # Update filename if different
