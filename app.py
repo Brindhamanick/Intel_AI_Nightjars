@@ -162,7 +162,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
         result_image: result image with bounding boxes, class names, confidence scores, object masks, and possibly object IDs
         result_list_json: detection result in json format
     """
-    results = model.predictor.predict(frame)
+    results = model.predict(frame)
     result_list_json = result_to_json(results[0], tracker=tracker)
     result_image = image_viewer(results[0], result_list_json, centers=centers)
     return result_image, result_list_json
@@ -231,7 +231,7 @@ def load_model(model_select, conf=0.45):
     return YOLO(model_select, conf=conf)
 
 
-model_path = "./yolovc8x_openvino_model/"
+model_path = "./yolovc8x_openvino_model/yolovcx8.xml"
 
 # Load the OpenVINO model directly
 model = YOLO(model_path)
