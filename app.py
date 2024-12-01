@@ -230,24 +230,12 @@ def load_model(model_select, conf=0.45):
     # Load the YOLO model and return it
     return YOLO(model_select, conf=conf)
 
-# Model initialization with caching
-model_select = "yolovc8x_openvino_model/"
-model = load_model(model_select, conf=0.45)
 
+model_path = "./yolovc8x_openvino_model/"
 
-# Validate folder existence
-if not model_select.exists():
-    st.error(f"The specified folder '{det_model_path}' does not exist. Please ensure it is correctly placed.")
-else:
-    # Load the compiled model
-    with st.spinner("Loading the model. Please wait..."):
-        model = YOLO(model_select)
-        st.success("Model loaded successfully!")
+# Load the OpenVINO model directly
+model = YOLO(model_path)
 
-    # Display further instructions or interact with the model
-    st.write("The model is ready for inference. You can now upload an image or video for detection.")
-
-# model1 = load_openvino_model(Path(model_seg_dir) / "model.xml", device)
 
 st.write("Models loaded successfully!")
 
