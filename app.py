@@ -226,9 +226,7 @@ core = ov.Core()
 # Function to compile OpenVINO models
 @st.cache_resource
 def compile_model(det_model_path, device):
-    """
-    Compiles the OpenVINO model using the specified device.
-    """
+
     det_ov_model = core.read_model(det_model_path)
 
     # OpenVINO configuration
@@ -244,9 +242,6 @@ def compile_model(det_model_path, device):
 # Function to load YOLO model and integrate OpenVINO
 @st.cache_resource
 def load_openvino_model(model_dir, device):
-    """
-    Loads and integrates YOLO with OpenVINO for object detection.
-    """
     # Define paths to OpenVINO files
     det_model_path = Path(model_dir) / "yolovc8xdark.xml"  # Adjust the filename if necessary
     compiled_model = compile_model(det_model_path, device)
@@ -263,15 +258,11 @@ def load_openvino_model(model_dir, device):
     det_model.predictor.model.ov_compiled_model = compiled_model
     return det_model
 
-# Streamlit Application
-st.title("Object Detection with YOLOv8 and OpenVINO")
-st.write("This app demonstrates object detection using YOLOv8 with OpenVINO optimization.")
-
 # Specify device
 device = "CPU"  # Change to "GPU" or "AUTO" if applicable
 
 # Paths to the pre-exported OpenVINO models
-det_model_path = Path("yolovc8x_openvino_model/")
+det_model_path = Path("yolovc8x_openvino_model")
 
 # Validate folder existence
 if not det_model_path.exists():
