@@ -213,41 +213,7 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
 st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="detective.ico")
 st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
 
-# Specify device
-device = "CPU"  # Change to "GPU" or "AUTO" based on your environment
-
-# Folder containing OpenVINO model
-model_dir = "./yolovc8x_openvino_model/"
-
-# Check model file paths
-det_model_path = Path(model_dir) / "yolovc8x.xml"  # Update filename if different
-if not det_model_path.exists():
-    st.error(f"Model file {det_model_path} not found! Please ensure the folder and files exist.")
-    st.stop()
-
-# Global OpenVINO Core instance
-core = ov.Core()
-
-# Function to load the OpenVINO model
-@st.cache_resource
-def load_openvino_model(det_model_path, device):
-    # Compile the OpenVINO model
-    det_ov_model = core.read_model(str(det_model_path))
-    compiled_model = core.compile_model(det_ov_model, device)
-    
-    # Integrate with YOLO
-    det_model = YOLO(model_dir, task="detect")
-    det_model.predictor.model.ov_compiled_model = compiled_model
-    return det_model
-          
-# Load the model
-st.write("Loading the YOLO model...")
-model = load_openvino_model(model_dir, device)
-st.success("Model loaded successfully!")
-
-# Test message to confirm functionality
-st.write(f"Model is ready for inference using {device}.")
-
+model = YOLO("yolovc8x_openvino_model")
 # Cache seg model paths
 model1= YOLO("yolov8xcdark-seg.pt")
 
