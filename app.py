@@ -212,11 +212,6 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
 
 st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="detective.ico")
 st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
-import os
-from pathlib import Path
-from ultralytics import YOLO
-import openvino.runtime as ov
-import streamlit as st
 
 # Specify device
 device = "CPU"  # Change to "GPU" or "AUTO" based on your environment
@@ -244,7 +239,7 @@ def load_openvino_model(det_model_path, device):
     det_model = YOLO(model_dir, task="detect")
     det_model.predictor.model.ov_compiled_model = compiled_model
     return det_model
-
+          
 # Load the model
 st.write("Loading the YOLO model...")
 model = load_openvino_model(det_model_path, device)
