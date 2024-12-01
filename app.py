@@ -242,7 +242,7 @@ def load_openvino_model(det_model_path, device):
           
 # Load the model
 st.write("Loading the YOLO model...")
-model = load_openvino_model(det_model_path, device)
+model = load_openvino_model(model_dir, device)
 st.success("Model loaded successfully!")
 
 # Test message to confirm functionality
