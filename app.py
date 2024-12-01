@@ -272,7 +272,7 @@ def load_openvino_model(model_dir, device):
 device = "CPU"  # Change as per your environment: "GPU", "AUTO", etc.
 
 # Paths to the pre-exported OpenVINO models
-det_model_path = Path("yolov8xcdark_openvino_model/yolov8xcdark.xml")
+det_model_path = Path("yolov8xcdark_openvino_model/")
 
 # Load the compiled models
 model = load_openvino_model(det_model_path, device)
