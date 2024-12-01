@@ -271,7 +271,7 @@ st.write("This app demonstrates object detection using YOLOv8 with OpenVINO opti
 device = "CPU"  # Change to "GPU" or "AUTO" if applicable
 
 # Paths to the pre-exported OpenVINO models
-det_model_path = Path("yolovc8x_openvino_model")
+det_model_path = Path("yolovc8x_openvino_model/")
 
 # Validate folder existence
 if not det_model_path.exists():
