@@ -162,7 +162,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
         result_image: result image with bounding boxes, class names, confidence scores, object masks, and possibly object IDs
         result_list_json: detection result in json format
     """
-    results = model.predict(frame)
+    results = model(frame)
     result_list_json = result_to_json(results[0], tracker=tracker)
     result_image = image_viewer(results[0], result_list_json, centers=centers)
     return result_image, result_list_json
@@ -220,23 +220,13 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
 st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="detective.ico")
 st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
 
-# Global OpenVINO core instance
-core = ov.Core()
-
-# Specify device
-device = "CPU"  # Change to "GPU" or "AUTO" if applicable
+# Function to load the OpenVINO model
 @st.cache_resource
-def load_model(model_select, conf=0.45):
-    # Load the YOLO model and return it
-    return YOLO(model_select, conf=conf)
-
-
-model_path = "yolovc8x_openvino_model/"
-
-# Load the OpenVINO model directly
-model = YOLO(model_path)
-
-
+def load_openvino_model(model_dir): 
+          return YOLO(model_dir, task="detect") # Specify device (set to CPU for simplicity)
+device = "CPU"
+model_dir = "./yolovc8x_openvino_model" 
+model = load_openvino_model(model_dir)
 st.write("Models loaded successfully!")
 
 # Cache seg model paths
