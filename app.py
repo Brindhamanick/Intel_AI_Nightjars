@@ -212,7 +212,7 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
 
 st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="detective.ico")
 st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
-model_path = "yolov8x_openvino_model/" 
+model_path = "yolovc8x_openvino_model/" 
 model = YOLO(model_path)
 # Cache seg model paths
 model1= YOLO("yolov8xcdark-seg.pt")
