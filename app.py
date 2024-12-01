@@ -223,54 +223,25 @@ st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
 # Global OpenVINO core instance
 core = ov.Core()
 
-# Function to compile OpenVINO models
-@st.cache_resource
-def compile_model(det_model_path, device):
-
-    det_ov_model = core.read_model(det_model_path)
-
-    # OpenVINO configuration
-    ov_config = {}
-    if device != "CPU":
-        det_ov_model.reshape({0: [1, 3, 640, 640]})
-    if "GPU" in device or ("AUTO" in device and "GPU" in core.available_devices):
-        ov_config = {"GPU_DISABLE_WINOGRAD_CONVOLUTION": "YES"}
-
-    det_compiled_model = core.compile_model(det_ov_model, device, ov_config)
-    return det_compiled_model
-
-# Function to load YOLO model and integrate OpenVINO
-@st.cache_resource
-def load_openvino_model(model_dir, device):
-    # Define paths to OpenVINO files
-    det_model_path = Path(model_dir) / "yolovc8xdark.xml"  # Adjust the filename if necessary
-    compiled_model = compile_model(model_dir, device)
-
-    # Initialize YOLO with OpenVINO
-    det_model = YOLO(model_dir, task="detect")
-
-    if det_model.predictor is None:
-        custom = {"conf": 0.25, "batch": 1, "save": False, "mode": "predict"}  # Default arguments
-        args = {**det_model.overrides, **custom}
-        det_model.predictor = det_model._smart_load("predictor")(overrides=args, _callbacks=det_model.callbacks)
-        det_model.predictor.setup_model(model=det_model.model)
-
-    det_model.predictor.model.ov_compiled_model = compiled_model
-    return det_model
-
 # Specify device
 device = "CPU"  # Change to "GPU" or "AUTO" if applicable
+@st.cache_resource
+def load_model(model_select, conf=0.45):
+    # Load the YOLO model and return it
+    return YOLO(model_select, conf=conf)
 
-# Paths to the pre-exported OpenVINO models
-det_model_path = Path("yolovc8x_openvino_model")
+# Model initialization with caching
+model_select = "yolovc8x_openvino_model/"
+model = load_model(model_select, conf=0.45)
+
 
 # Validate folder existence
-if not det_model_path.exists():
+if not model_select.exists():
     st.error(f"The specified folder '{det_model_path}' does not exist. Please ensure it is correctly placed.")
 else:
     # Load the compiled model
     with st.spinner("Loading the model. Please wait..."):
-        model = load_openvino_model(det_model_path, device)
+        model = load_model(model_select, conf=0.45)
         st.success("Model loaded successfully!")
 
     # Display further instructions or interact with the model
