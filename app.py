@@ -162,7 +162,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
         result_image: result image with bounding boxes, class names, confidence scores, object masks, and possibly object IDs
         result_list_json: detection result in json format
     """
-    results = model(frame)
+    results = model.predict(frame)
     result_list_json = result_to_json(results[0], tracker=tracker)
     result_image = image_viewer(results[0], result_list_json, centers=centers)
     return result_image, result_list_json
@@ -207,13 +207,6 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     subprocess.call(args=f"ffmpeg -i {os.path.join('.', temp_file)} -c:v libx264 {os.path.join('.', video_file_name_out)}".split(" "))
     os.remove(temp_file)
     return video_file_name_out, result_video_json_file
-
-
-# @st.cache_resource
-# def load_model(model_path):
-#     # Load and return the YOLO model
-#     return YOLO(model_path)
-
 
 
 
