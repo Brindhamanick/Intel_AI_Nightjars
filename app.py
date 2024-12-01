@@ -231,7 +231,7 @@ def load_model(model_select, conf=0.45):
     return YOLO(model_select, conf=conf)
 
 
-model_path = "./yolovc8x_openvino_model/yolovcx8.xml"
+model_path = "yolovc8x_openvino_model/"
 
 # Load the OpenVINO model directly
 model = YOLO(model_path)
