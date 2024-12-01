@@ -244,7 +244,7 @@ def compile_model(det_model_path, device):
 def load_openvino_model(model_dir, device):
     # Define paths to OpenVINO files
     det_model_path = Path(model_dir) / "yolovc8xdark.xml"  # Adjust the filename if necessary
-    compiled_model = compile_model(det_model_path, device)
+    compiled_model = compile_model(model_dir, device)
 
     # Initialize YOLO with OpenVINO
     det_model = YOLO(model_dir, task="detect")
