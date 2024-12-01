@@ -241,7 +241,7 @@ if not model_select.exists():
 else:
     # Load the compiled model
     with st.spinner("Loading the model. Please wait..."):
-        model = load_model(model_select, conf=0.45)
+        model = YOLO(model_select)
         st.success("Model loaded successfully!")
 
     # Display further instructions or interact with the model
