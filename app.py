@@ -241,7 +241,7 @@ if source_index == 0:
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
             
             # For detection with bounding boxes
-            print(f"Used Custom reframed YOLOv8 model: {model_select}")
+            # print(f"Used Custom reframed YOLOv8 model: {model_select}")
             
             img, result_list_json = image_processing(img, model)
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
