@@ -253,9 +253,17 @@ class OpenVINOModel:
         results = self.model([input_data])[self.output_layer]
         return results  # Ensure compatibility with result_to_json
 
-# Load your OpenVINO model
-model_path = "yolov8c_openvino_model/"  # Update with the actual path
-model = OpenVINOModel(model_path)
+
+# Ensure the correct paths to the .xml and .bin files
+model_path = "yolov8c_openvino_model/yolov8c.xml"
+
+# Load the model
+core = Core()
+try:
+    model = core.compile_model(model_path, "CPU")
+    print("Model loaded successfully!")
+except Exception as e:
+    print(f"Error loading model: {e}")
 st.write("Models loaded successfully!")
 
 
