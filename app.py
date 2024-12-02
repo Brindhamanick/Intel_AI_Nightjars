@@ -207,36 +207,6 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     return video_file_name_out, result_video_json_file
 
 
-class OpenVINOModel:
-    def __init__(self, model_path):
-        """
-        Initialize the OpenVINO model.
-        """
-        core = Core()
-        self.model = core.compile_model("yolov8c_openvino_model/yolov8c.xml", "CPU")  # Replace "CPU" with "GPU" if needed
-        self.input_layer = self.model.input(0)
-        self.output_layer = self.model.output(0)
-        self.input_shape = self.input_layer.shape
-
-    def preprocess(self, frame):
-        """
-        Preprocess the input frame to match the model's requirements.
-        """
-        _, _, height, width = self.input_shape
-        resized = cv2.resize(frame, (width, height))
-        normalized = resized.astype(np.float32) / 255.0  # Normalize to [0, 1]
-        transposed = normalized.transpose(2, 0, 1)  # HWC to CHW
-        return np.expand_dims(transposed, axis=0)  # Add batch dimension
-
-    def predict(self, frame):
-        """
-        Perform inference on the frame and return results.
-        """
-        input_data = self.preprocess(frame)
-        results = self.model([input_data])[self.output_layer]
-        return results  # Ensure compatibility with result_to_json
-
-
 # Ensure the correct paths to the .xml and .bin files
 model_path = "yolov8c_openvino_model/yolov8c.xml"
 
