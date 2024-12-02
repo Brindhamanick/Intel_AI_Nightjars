@@ -263,7 +263,7 @@ if source_index == 0:
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
             
             gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            image = cv2.equalizeHist(image)
+            image = cv2.equalizeHist(gray_image)
             image = cv2.merge([image, image, image])  #
             # For detection with bounding boxes
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
