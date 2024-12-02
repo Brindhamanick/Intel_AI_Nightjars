@@ -161,6 +161,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
         result_image: result image with bounding boxes, class names, confidence scores, object masks, and possibly object IDs
         result_list_json: detection result in json format
     """
+    st.image(frame)
     results = model.predict(frame)
     result_list_json = result_to_json(results[0], tracker=tracker)
     result_image = image_viewer(results[0], result_list_json, centers=centers)
@@ -229,7 +230,7 @@ model_path = "yolov8x_openvino_model/yolov8c.xml"
 device = "CPU"
 # Load the model
 try:
-    model = load_model(model_path, device)
+    modelop = load_model(model_path, device)
     st.write("Optimized Openvino Yolov8c Models loaded successfully!")
           
 except Exception as e:
@@ -269,7 +270,7 @@ if source_index == 0:
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
             st.image(image, caption="Grayscale image", channels="BGR")   
             
-            img, result_list_json = image_processing(image, model)
+            img, result_list_json = image_processing(image, modelop)
             st.write(f"Model: {model}")
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
