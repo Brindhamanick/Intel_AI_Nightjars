@@ -25,7 +25,13 @@ import intel_extension_for_pytorch as ipex
 import openvino.runtime as ov
 import gc
 from pathlib import Path
+import os
 
+import os
+print("Checking file existence...")
+print("Absolute path:", os.path.abspath("yolov8c_openvino_model/yolov8c.xml"))
+print("Exists:", os.path.exists("yolov8c_openvino_model/yolov8c.xml"))
+print("Current working directory:", os.getcwd())
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
