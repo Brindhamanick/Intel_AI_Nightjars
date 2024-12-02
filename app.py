@@ -233,7 +233,7 @@ def load_openvino_model(model_dir, device):
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
-    det_model = YOLO(model_dir, task="detect")
+    det_model = YOLO("yolov8c_openvino_model/", task="detect")
 
     if det_model.predictor is None:
         custom = {"conf": 0.40, "batch": 1, "save": False, "mode": "predict"}  
