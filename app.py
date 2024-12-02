@@ -126,7 +126,7 @@ def view_result_default(result: Results, result_list_json, centers=None, image=N
         result_image_default: result image from default visualization function
     """
           
-    # ALPHA = 0.5
+    ALPHA = 0.5
     # image = result.orig_img
     result_image_ultralytics = image.copy() if image is not None else result.orig_img.copy()
           
@@ -175,8 +175,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     clahe = cv2.createCLAHE(clipLimit=0.5, tileGridSize=(8, 8))
     enhanced_image = clahe.apply(equalized_image)
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
-    # kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
-    # sharpened_image = cv2.filter2D(image, -1, kernel)
+    
     processed_image = image
     st.image(processed_image, caption="Processed image", channels="BGR")
              
