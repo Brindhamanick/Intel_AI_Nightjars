@@ -240,7 +240,7 @@ def compile_model(det_model_path, device):
 def load_openvino_model(model_dir, device):
     # Define paths to OpenVINO files
     det_model_path = Path(model_dir)/"yolovc8x.xml"  # Adjust for your actual file name if necessary
-    compiled_model = compile_model(model_dir, device)
+    compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
     det_model = YOLO(model_dir, task="detect")
@@ -256,7 +256,7 @@ def load_openvino_model(model_dir, device):
 
 # Specify device
 device = "CPU"  # Change as per your environment: "GPU", "AUTO", etc.
-det_model_dir = "yolovc8x_openvino_model"  # Detection model directory
+det_model_dir = "yolovc8x_openvino_model/"  # Detection model directory
 # Load the detection and segmentation models
 model = load_openvino_model(det_model_dir, device)
 st.write("Models loaded successfully!")
