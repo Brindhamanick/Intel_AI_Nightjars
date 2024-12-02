@@ -63,11 +63,22 @@ def result_to_json(result: Results, tracker=None):
             },
         } for idx in range(len_results)
     ]
-    if result.masks is not None:
-        for idx in range(len_results):
-            # result_list_json[idx]['mask'] = cv2.resize(result.masks.data[idx], (width, height))
-            result_list_json[idx]['mask'] = cv2.resize(result.masks.data[idx].cpu().numpy(), (result.orig_shape[1], result.orig_shape[0])).tolist()
-            result_list_json[idx]['segments'] = result.masks.segments[idx].tolist()
+    # if result.masks is not None:
+    #     for idx in range(len_results):
+    #         # result_list_json[idx]['mask'] = cv2.resize(result.masks.data[idx], (width, height))
+    #         result_list_json[idx]['mask'] = cv2.resize(result.masks.data[idx].cpu().numpy(), (result.orig_shape[1], result.orig_shape[0])).tolist()
+    #         result_list_json[idx]['segments'] = result.masks.segments[idx].tolist()
+   
+   if result.masks is not None:
+       for idx in range(len_results):
+           result_list_json[idx]['mask'] = cv2.resize(
+           result.masks.data[idx].cpu().numpy(),
+                      (result.orig_shape[1], result.orig_shape[0])
+           ).tolist()
+                  
+                  # Use the `xy` attribute to get pixel coordinates of the mask's contours
+          result_list_json[idx]['segments'] = [seg.tolist() for seg in result.masks.xy[idx]]
+              
     if tracker is not None:
         bbs = [
             (
@@ -136,7 +147,7 @@ def view_result_default(result: Results, result_list_json, centers=None):
         cv2.rectangle(image, (result['bbox']['x_min'], result['bbox']['y_min']), (result['bbox']['x_max'], result['bbox']['y_max']), class_color, 1)
         (text_width, text_height), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_DUPLEX, 0.85, 1)
         cv2.rectangle(image, (result['bbox']['x_min'], result['bbox']['y_min'] - text_height - baseline), (result['bbox']['x_min'] + text_width, result['bbox']['y_min']), class_color, -1)
-        cv2.putText(image, text , (result['bbox']['x_min'], result['bbox']['y_min'] - baseline), cv2.FONT_HERSHEY_DUPLEX, 0.85, (255, 255, 255), 1)
+        cv2.putText(image, text , (result['bbox']['x_min'], result['bbox']['y_min'] - baseline), cv2.FONT_HERSHEY_DUPLEX, 0.90, (255, 255, 255), 1)
         if 'object_id' in result and centers is not None:
             centers[result['object_id']].append((int((result['bbox']['x_min'] + result['bbox']['x_max']) / 2), int((result['bbox']['y_min'] + result['bbox']['y_max']) / 2)))
             for j in range(1, len(centers[result['object_id']])):
