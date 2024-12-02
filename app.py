@@ -22,7 +22,7 @@ import av
 from tts import *
 import torch
 import intel_extension_for_pytorch as ipex
-import openvino.runtime as ov
+# import openvino.runtime as ov
 import gc
 from pathlib import Path
 
@@ -206,19 +206,56 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     os.remove(temp_file)
     return video_file_name_out, result_video_json_file
 
-@st.cache_resource
-def load_model(model_path):
-    # Load and return the YOLO model
-    return YOLO(model_path)
+# @st.cache_resource
+# def load_model(model_path):
+#     # Load and return the YOLO model
+#     return YOLO(model_path)
 
 
 
-# Cache model paths
-model_select = "yolov8xcdark.pt"
-# Load models
+# # Cache model paths
+# model_select = "yolov8xcdark.pt"
+# # Load models
 
-model = YOLO("yolov8c_openvino_model/yolov8c.xml")
+# model = YOLO("yolov8c_openvino_model/yolov8c.xml")
 # model = YOLO("yolov8xcdark.pt")
+
+from openvino.runtime import Core
+import cv2
+import numpy as np
+
+class OpenVINOModel:
+    def __init__(self, model_path):
+        """
+        Initialize the OpenVINO model.
+        """
+        core = Core()
+        self.model = core.compile_model(model_path, "CPU")  # Replace "CPU" with "GPU" if needed
+        self.input_layer = self.model.input(0)
+        self.output_layer = self.model.output(0)
+        self.input_shape = self.input_layer.shape
+
+    def preprocess(self, frame):
+        """
+        Preprocess the input frame to match the model's requirements.
+        """
+        _, _, height, width = self.input_shape
+        resized = cv2.resize(frame, (width, height))
+        normalized = resized.astype(np.float32) / 255.0  # Normalize to [0, 1]
+        transposed = normalized.transpose(2, 0, 1)  # HWC to CHW
+        return np.expand_dims(transposed, axis=0)  # Add batch dimension
+
+    def predict(self, frame):
+        """
+        Perform inference on the frame and return results.
+        """
+        input_data = self.preprocess(frame)
+        results = self.model([input_data])[self.output_layer]
+        return results  # Ensure compatibility with result_to_json
+
+# Load your OpenVINO model
+model_path = "yolov8c_openvino_model/yolov8c.xml"  # Update with the actual path
+model = OpenVINOModel(model_path)
 st.write("Models loaded successfully!")
 
 
