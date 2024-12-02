@@ -250,8 +250,8 @@ st.write("Exists:", os.path.exists("yolov8c_openvino_model/yolov8c.xml"))
 st.write("Current working directory:", os.getcwd())
 
 # Load the detection and segmentation models
-# model = load_openvino_model(det_model_dir, device)
-model = YOLO("yolov8xcdark.pt")
+model = load_openvino_model(det_model_dir, device)
+# model = YOLO("yolov8xcdark.pt")
 st.write("Models loaded successfully!")
 
 # Cache seg model paths
