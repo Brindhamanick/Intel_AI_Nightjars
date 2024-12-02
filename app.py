@@ -238,7 +238,7 @@ def compile_model(det_model_path, device):
 @st.cache_resource
 def load_openvino_model(model_dir, device):
     # Define paths to OpenVINO files
-    det_model_path = "yolovc8x.xml"  # Adjust for your actual file name if necessary
+    det_model_path = "yolovc8x"  # Adjust for your actual file name if necessary
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
