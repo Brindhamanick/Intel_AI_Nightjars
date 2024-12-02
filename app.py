@@ -129,6 +129,7 @@ def view_result_default(result: Results, result_list_json, centers=None, image=N
     # ALPHA = 0.5
     # image = result.orig_img
     result_image_ultralytics = image.copy() if image is not None else result.orig_img.copy()
+          
     for result in result_list_json:
         class_color = COLORS[result['class_id'] % len(COLORS)]
         # fontFace = "/content/drive/MyDrive/Yolov8_Nightjars/models/ahronbd.ttf"
@@ -171,13 +172,13 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     denoised_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
     equalized_image = cv2.equalizeHist(denoised_image)
-    clahe = cv2.createCLAHE(clipLimit=1.0, tileGridSize=(8, 8))
+    clahe = cv2.createCLAHE(clipLimit=0.r, tileGridSize=(8, 8))
     enhanced_image = clahe.apply(equalized_image)
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
     # kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
     # sharpened_image = cv2.filter2D(image, -1, kernel)
     processed_image = image
-    st.image(processed_image, caption="Detected image", channels="BGR")
+    st.image(processed_image, caption="Processed image", channels="BGR")
              
     results = model.predict(processed_image)
     result_list_json = result_to_json(results[0], tracker=tracker)
