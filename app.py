@@ -338,9 +338,15 @@ if source_index == 1:
             # print(json.dumps(result_video_json_file, indent=2))
                   # Remove the original uploaded file
             # os.remove(video_file.name)
+            st.write("Processing video...")
+              video_path = os.path.join("temp_videos", uploaded_video.name)
+              with open(video_path, "wb") as f:
+                  f.write(uploaded_video.getbuffer())
+              st.video(video_file_out)
+              
 
-            video_bytes = open(video_file_out, 'rb').read()
-            st.video(video_bytes)
+            # video_bytes = open(video_file_out, 'rb').read()
+            # st.video(video_bytes)
 
     
 
