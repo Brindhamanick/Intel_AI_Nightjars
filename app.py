@@ -208,8 +208,7 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     return video_file_name_out, result_video_json_file
 
 
-st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="assets/detective.ico")
-st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
+
 st.image("assets/nmainlogoo.png")
 
 
@@ -226,7 +225,7 @@ def load_seg_model(model_path):
 
 
 # Ensure the correct paths to the .xml and .bin files
-model_path = "yolov8c_openvino_model/yolov8c.xml"
+model_path = "yolov8xc_openvino_model/yolov8c.xml"
 device = "CPU"
 # Load the model
 try:
@@ -262,13 +261,17 @@ if source_index == 0:
             st.sidebar.success("Successfully uploaded")
             st.sidebar.image(image_file, caption="Uploaded image")
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
-            gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            gray_img = cv2.merge([gray_img, gray_img, gray_img])
+            
+            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            image = cv2.adaptiveThreshold(
+              gray_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2
+            )
+            image = cv2.merge([image, image, image])
             # For detection with bounding boxes
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
-            st.image(gray_img, caption="Grayscale image", channels="BGR")   
+            st.image(image, caption="Grayscale image", channels="BGR")   
             
-            img, result_list_json = image_processing(gray_img, model)
+            img, result_list_json = image_processing(image, model)
             st.write(f"Model: {model}")
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
@@ -292,7 +295,15 @@ if source_index == 0:
             img, result_list_json = image_processing(img, model1)
             st.success("✅ Task Segment: Segmentation using v8 model")
             st.image(img, caption="Segmented image", channels="BGR")
-           
+
+            detected_classes = [item['class'] for item in result_list_json]
+            class_fq = Counter(detected_classes)
+            
+            # Create a DataFrame for class frequency
+            df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
+          
+            st.write("Class Frequency:")
+            st.dataframe(df_fq)  
  
 
 # Video & Live cam section
