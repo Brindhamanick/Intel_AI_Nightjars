@@ -222,6 +222,7 @@ model = YOLO("yolov8xcdark_openvino_model/")
 # model = YOLO("yolov8xcdark.pt")
 st.write("Models loaded successfully!")
 
+
 # Cache seg model paths
 model1= YOLO("yolov8xcdark-seg.pt")
 
