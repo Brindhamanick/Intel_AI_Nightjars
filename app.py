@@ -333,8 +333,11 @@ if source_index == 1:
             centers = [deque(maxlen=30) for _ in range(10000)]
             open(video_file.name, "wb").write(video_file.read())
             video_file_out, result_video_json_file = video_processing(video_file.name, model, tracker=tracker, centers=centers)
-            os.remove(video_file.name)
+            # os.remove(video_file.name)
             # print(json.dumps(result_video_json_file, indent=2))
+                  # Remove the original uploaded file
+            # os.remove(video_file.name)
+
             video_bytes = open(video_file_out, 'rb').read()
             st.video(video_bytes)
 
