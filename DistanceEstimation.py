@@ -28,12 +28,12 @@ BLACK = (0, 0, 0)
 FONTS = cv.FONT_HERSHEY_PLAIN
 
 
-@st.cache_resource
+# @st.cache_resource
 def load_model(model_path, device):
     core = Core()
     return core.compile_model(model_path, device)
 
-@st.cache_resource
+# @st.cache_resource
 def load_seg_model(model_path):
     # Load and return the YOLO model
     return YOLO(model_path)
