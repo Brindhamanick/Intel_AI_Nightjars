@@ -216,9 +216,8 @@ def load_model(model_path):
 # Cache model paths
 model_select = "yolov8xcdark.pt"
 # Load models
-model_opti = load_model(model_select)
-model_opti.export(format="openvino") 
-model = YOLO("yolov8xcdark_openvino_model/")
+
+model = YOLO("yolov8c_openvino_model/yolov8c.xml")
 # model = YOLO("yolov8xcdark.pt")
 st.write("Models loaded successfully!")
 
