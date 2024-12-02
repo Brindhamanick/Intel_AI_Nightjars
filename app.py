@@ -246,8 +246,8 @@ def load_openvino_model(model_dir, device):
 
 device = "CPU"  
 det_model_dir = "yolov8c_openvino_model/" 
-print("Exists:", os.path.exists("yolov8c_openvino_model/yolov8c.xml"))
-print("Current working directory:", os.getcwd())
+st.write("Exists:", os.path.exists("yolov8c_openvino_model/yolov8c.xml"))
+st.write("Current working directory:", os.getcwd())
 
 # Load the detection and segmentation models
 # model = load_openvino_model(det_model_dir, device)
