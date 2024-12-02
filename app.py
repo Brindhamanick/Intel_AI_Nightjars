@@ -208,6 +208,12 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     return video_file_name_out, result_video_json_file
 
 
+st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="assets/detective.ico")
+st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
+st.image("assets/nmainlogoo.png")
+
+
+
 @st.cache_resource
 def load_model(model_path, device):
     core = Core()
@@ -263,19 +269,18 @@ if source_index == 0:
             st.image(gray_img, caption="Grayscale image", channels="BGR")   
             
             img, result_list_json = image_processing(gray_img, model)
-            st.write("Model"+ {model})
+            st.write(f"Model: {model}")
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
-            # Current number of classes
+            
             detected_classes = [item['class'] for item in result_list_json]
             class_fq = Counter(detected_classes)
             
             # Create a DataFrame for class frequency
             df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
-            
-            # Display class frequency count as a table
+          
             st.write("Class Frequency:")
-            st.dataframe(df_fq)  # Display the class frequency DataFrame
+            st.dataframe(df_fq)  
             
         if image_file is not None and process_seg_button:
             st.write(" ")
