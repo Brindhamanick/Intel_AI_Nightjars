@@ -331,11 +331,13 @@ if source_index == 1:
         with st.spinner(text='Detecting with 💕...'):
             tracker = DeepSort(max_age=5)
             centers = [deque(maxlen=30) for _ in range(10000)]
-            with open(video_path, "wb") as f:
-                f.write(uploaded_video.getbuffer())
-            processed_video_path, result_json_path = video_processing(video_path, model)
-            st.video(processed_video_path)
-            with open(result_json_path, "r") as f:
+            with open(video_file.name, "wb") as f:
+                f.write(video_file.read())
+            video_file_out, result_video_json_file = video_processing(video_file.name, model, tracker=tracker, centers=centers)
+            os.remove(video_file.name)
+            st.write("Processing video...")
+            st.video(video_file_out)
+            with open(result_video_json_file, "r") as f:
                 result_json = json.load(f)
             st.json(result_json)
 
