@@ -230,8 +230,7 @@ device = "CPU"
 # Load the model
 try:
     model = load_model(model_path, device)
-    print("Model loaded successfully!")
-    st.write("Models loaded successfully!")
+    st.write("Optimized Openvino Yolov8c Models loaded successfully!")
           
 except Exception as e:
     print(f"Error loading model: {e}")
@@ -262,11 +261,12 @@ if source_index == 0:
             st.sidebar.success("Successfully uploaded")
             st.sidebar.image(image_file, caption="Uploaded image")
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
-            
+            gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            gray_img = cv2.merge([gray_img, gray_img, gray_img])
             # For detection with bounding boxes
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
             
-            img, result_list_json = image_processing(img, model)
+            img, result_list_json = image_processing(gray_img, model)
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             # Current number of classes
