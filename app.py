@@ -208,12 +208,12 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     os.remove(temp_file)
     return video_file_name_out, result_video_json_file
 
-
+core = ov.Core()
 
 st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="detective.ico")
 st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
 model_path = "yolovc8x_openvino_model/" 
-compiled_model = ov.compile_model(model_path)
+compiled_model = core.compile_model("yolovc8x_openvino_model/yolovc8x.xml")
 
 model = YOLO(compiled_model)
 # Cache seg model paths
