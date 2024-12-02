@@ -217,7 +217,7 @@ model_path = "yolov8c_openvino_model/yolov8c.xml"
 device = "CPU"
 # Load the model
 try:
-    model = load_model(model_path, device)
+    # model = load_model(model_path, device)
     print("Model loaded successfully!")
     st.write("Models loaded successfully!")
           
@@ -235,7 +235,6 @@ source_index = st.sidebar.selectbox("Select Input type", range(
 
 
 # Image detection section
-
 if source_index == 0:
     st.header("Image Processing using YOLOv8")
     image_file = st.file_uploader("Upload an image 🔽", type=["jpg", "jpeg", "png"])
@@ -268,7 +267,16 @@ if source_index == 0:
             st.write("Class Frequency:")
             st.dataframe(df_fq)  # Display the class frequency DataFrame
             
-               
+        if image_file is not None and process_seg_button:
+            st.write(" ")
+            st.sidebar.success("Successfully uploaded")
+            st.sidebar.image(image_file,caption="Uploaded image")
+            img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1) 
+           
+            ## for detection with bb & segmentation masks
+            img, result_list_json = image_processing(img, model1)
+            st.success("✅ Task Segment: Segmentation using v8 model")
+            st.image(img, caption="Segmented image", channels="BGR")
            
  
 
