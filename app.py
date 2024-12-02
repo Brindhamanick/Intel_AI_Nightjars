@@ -225,7 +225,7 @@ def load_seg_model(model_path):
 
 
 # Ensure the correct paths to the .xml and .bin files
-model_path = "yolov8xc_openvino_model/yolov8c.xml"
+model_path = "yolov8x_openvino_model/yolov8c.xml"
 device = "CPU"
 # Load the model
 try:
@@ -263,10 +263,8 @@ if source_index == 0:
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
             
             gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            image = cv2.adaptiveThreshold(
-              gray_image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2
-            )
-            image = cv2.merge([image, image, image])
+            image = cv2.equalizeHist(image)
+            image = cv2.merge([image, image, image])  #
             # For detection with bounding boxes
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
             st.image(image, caption="Grayscale image", channels="BGR")   
