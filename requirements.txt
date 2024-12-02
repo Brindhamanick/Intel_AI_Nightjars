@@ -8,16 +8,16 @@ streamlit
 streamlit_autorefresh
 streamlit_webrtc
 
+# Intel optimization -------------------------
+torch
+intel-extension-for-pytorch 
+openvino
+openvino-dev
 
 # Base ----------------------------------------
-
-
 av
 numpy
 opencv-python-headless
-stqdm
-
-numpy
 stqdm
 deep-sort-realtime
 
@@ -27,7 +27,4 @@ deep-sort-realtime
 ibm_cloud_sdk_core==3.15.3
 ibm_watson==6.0.0
 
-torch
-intel-extension-for-pytorch 
-openvino
-openvino-dev
+
