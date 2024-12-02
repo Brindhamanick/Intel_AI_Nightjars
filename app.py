@@ -91,7 +91,7 @@ def result_to_json(result: Results, tracker=None):
 
 
 
-def view_result_ultralytics(result: Results, result_list_json, centers=None):
+def view_result_ultralytics(result: Results, result_list_json, centers=None, image=None):
     """
     Visualize result from ultralytics YOLOv8 prediction using ultralytics YOLOv8 built-in visualization function
     Parameters:
@@ -101,6 +101,8 @@ def view_result_ultralytics(result: Results, result_list_json, centers=None):
     Returns:
         result_image_ultralytics: result image from ultralytics YOLOv8 built-in visualization function
     """
+    result_image_ultralytics = image.copy() if image is not None else result.orig_img.copy()
+
     result_image_ultralytics = result.plot()
     for result_json in result_list_json:
         class_color = COLORS[result_json['class_id'] % len(COLORS)]
