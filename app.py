@@ -230,7 +230,7 @@ class OpenVINOModel:
         Initialize the OpenVINO model.
         """
         core = Core()
-        self.model = core.compile_model(model_path, "CPU")  # Replace "CPU" with "GPU" if needed
+        self.model = core.compile_model("yolov8c_openvino_model/yolov8c.xml", "CPU")  # Replace "CPU" with "GPU" if needed
         self.input_layer = self.model.input(0)
         self.output_layer = self.model.output(0)
         self.input_shape = self.input_layer.shape
