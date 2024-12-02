@@ -228,7 +228,7 @@ def load_seg_model(model_path):
 # Ensure the correct paths to the .xml and .bin files
 model_path = "yolov8x_openvino_model/yolov8c.xml"
 device = "CPU"
-modelop = load_model(model_path, device)
+
 # Load the model
 try:
     modelop = load_model(model_path, device)
@@ -271,8 +271,8 @@ if source_index == 0:
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
             st.image(image, caption="Grayscale image", channels="BGR")   
             
-            img, result_list_json = image_processing(image, modelop)
-            st.write(f"Model: {model}")
+            img, result_list_json = image_processing(image, model)
+            st.write(f"Model: {modelop}")
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             
