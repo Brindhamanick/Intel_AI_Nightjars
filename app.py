@@ -171,8 +171,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
     kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
     sharpened_image = cv2.filter2D(image, -1, kernel)
-    gamma_corrected_image = adjust_gamma(sharpened_image, gamma=1.5)
-    processed_image = gamma_corrected_image
+    processed_image = sharpened_image
            
     results = model.predict(processed_image)
     result_list_json = result_to_json(results[0], tracker=tracker)
