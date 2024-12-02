@@ -162,20 +162,23 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
         result_list_json: detection result in json format
     """
     
+    # Preserve the original image for visualization
+    original_image = frame.copy()
           
     gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     denoised_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
     equalized_image = cv2.equalizeHist(denoised_image)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    clahe = cv2.createCLAHE(clipLimit=1.0, tileGridSize=(8, 8))
     enhanced_image = clahe.apply(equalized_image)
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
     # kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
     # sharpened_image = cv2.filter2D(image, -1, kernel)
     processed_image = image
-           
+    st.image(processed_image, caption="Detected image", channels="BGR")
+             
     results = model.predict(processed_image)
     result_list_json = result_to_json(results[0], tracker=tracker)
-    result_image = image_viewer(results[0], result_list_json, centers=centers)
+    result_image = image_viewer(results[0], result_list_json, centers=centers, image=original_image)
     return result_image, result_list_json
 
 
