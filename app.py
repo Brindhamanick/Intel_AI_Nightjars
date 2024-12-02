@@ -63,11 +63,6 @@ def result_to_json(result: Results, tracker=None):
             },
         } for idx in range(len_results)
     ]
-    # if result.masks is not None:
-    #     for idx in range(len_results):
-    #         # result_list_json[idx]['mask'] = cv2.resize(result.masks.data[idx], (width, height))
-    #         result_list_json[idx]['mask'] = cv2.resize(result.masks.data[idx].cpu().numpy(), (result.orig_shape[1], result.orig_shape[0])).tolist()
-    #         result_list_json[idx]['segments'] = result.masks.segments[idx].tolist()
    
     if result.masks is not None:
        for idx in range(len_results):
@@ -265,8 +260,10 @@ if source_index == 0:
             gray_img = cv2.merge([gray_img, gray_img, gray_img])
             # For detection with bounding boxes
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
+            st.image(gray_img, caption="Grayscale image", channels="BGR")   
             
             img, result_list_json = image_processing(gray_img, model)
+            st.write("Model"+ {model})
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             # Current number of classes
