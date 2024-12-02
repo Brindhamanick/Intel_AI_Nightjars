@@ -22,9 +22,9 @@ import av
 from tts import *
 import torch
 import intel_extension_for_pytorch as ipex
-# import openvino.runtime as ov
-import gc
 from pathlib import Path
+from openvino.runtime import Core
+
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
@@ -206,23 +206,6 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     os.remove(temp_file)
     return video_file_name_out, result_video_json_file
 
-# @st.cache_resource
-# def load_model(model_path):
-#     # Load and return the YOLO model
-#     return YOLO(model_path)
-
-
-
-# # Cache model paths
-# model_select = "yolov8xcdark.pt"
-# # Load models
-
-# model = YOLO("yolov8c_openvino_model/yolov8c.xml")
-# model = YOLO("yolov8xcdark.pt")
-
-from openvino.runtime import Core
-import cv2
-import numpy as np
 
 class OpenVINOModel:
     def __init__(self, model_path):
