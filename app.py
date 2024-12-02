@@ -245,7 +245,7 @@ def load_openvino_model(model_dir, device):
     return det_model
 
 device = "CPU"  
-det_model_dir = "yolov8c_openvino_model/" 
+det_model_dir = "yolov8c_openvino_model" 
 st.write("Exists:", os.path.exists("yolov8c_openvino_model/yolov8c.xml"))
 st.write("Current working directory:", os.getcwd())
 
