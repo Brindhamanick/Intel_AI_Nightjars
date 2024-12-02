@@ -200,13 +200,13 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     """
     results = model.predict(video_file)
     model_name = model.ckpt_path.split('/')[-1].split('.')[0]
-    output_folder = os.path.join('output_videos', video_file.split('.')[0])
+    output_folder = os.path.join('output_videos', os.path.splitext(os.path.basename(video_file))[0])
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
-    video_file_name_out = os.path.join(output_folder, f"{video_file.split('.')[0]}_{model_name}_output.mp4")
+    video_file_name_out = os.path.join(output_folder, f"{os.path.splitext(os.path.basename(video_file))[0]}_{model_name}_output.mp4")
     if os.path.exists(video_file_name_out):
         os.remove(video_file_name_out)
-    result_video_json_file = os.path.join(output_folder, f"{video_file.split('.')[0]}_{model_name}_output.json")
+    result_video_json_file = os.path.join(output_folder, f"{os.path.splitext(os.path.basename(video_file))[0]}_{model_name}_output.json")
     if os.path.exists(result_video_json_file):
         os.remove(result_video_json_file)
     json_file = open(result_video_json_file, 'a')
@@ -223,7 +223,6 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     video_writer.release()
     subprocess.call(args=f"ffmpeg -i {os.path.join('.', temp_file)} -c:v libx264 {os.path.join('.', video_file_name_out)}".split(" "))
     os.remove(temp_file)
-    
     return video_file_name_out, result_video_json_file
 
 
@@ -332,17 +331,14 @@ if source_index == 1:
         with st.spinner(text='Detecting with 💕...'):
             tracker = DeepSort(max_age=5)
             centers = [deque(maxlen=30) for _ in range(10000)]
-            open(video_file.name, "wb").write(video_file.read())
-            video_file_out, result_video_json_file = video_processing(video_file.name, model, tracker=tracker, centers=centers)
-            # os.remove(video_file.name)
-            # print(json.dumps(result_video_json_file, indent=2))
-                  # Remove the original uploaded file
-            # os.remove(video_file.name)
-            st.write("Processing video...")
-              video_path = os.path.join("temp_videos", uploaded_video.name)
-              with open(video_path, "wb") as f:
-                  f.write(uploaded_video.getbuffer())
-              st.video(video_file_out)
+            with open(video_path, "wb") as f:
+                f.write(uploaded_video.getbuffer())
+            processed_video_path, result_json_path = video_processing(video_path, model)
+            st.video(processed_video_path)
+            with open(result_json_path, "r") as f:
+                result_json = json.load(f)
+            st.json(result_json)
+
               
 
             # video_bytes = open(video_file_out, 'rb').read()
