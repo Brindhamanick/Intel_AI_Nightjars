@@ -206,6 +206,12 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     os.remove(temp_file)
     return video_file_name_out, result_video_json_file
 
+@st.cache_resource
+def load_model(model_path):
+    # Load and return the YOLO model
+    return YOLO(model_path)
+
+
 
 # Cache model paths
 model_select = "yolov8xcdark.pt"
