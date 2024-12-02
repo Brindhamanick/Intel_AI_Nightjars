@@ -140,7 +140,7 @@ def view_result_default(result: Results, result_list_json, centers=None):
             image = cv2.addWeighted(image, 1, image_mask, ALPHA, 0)
         text = f"{result['class']} {result['object_id']}: {result['confidence']:.2f}" if 'object_id' in result else f"{result['class']}: {result['confidence']:.2f}"
         cv2.rectangle(image, (result['bbox']['x_min'], result['bbox']['y_min']), (result['bbox']['x_max'], result['bbox']['y_max']), class_color, 1)
-        (text_width, text_height), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_DUPLEX, 0.85, 1)
+        (text_width, text_height), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_DUPLEX, 0.90, 5)
         cv2.rectangle(image, (result['bbox']['x_min'], result['bbox']['y_min'] - text_height - baseline), (result['bbox']['x_min'] + text_width, result['bbox']['y_min']), class_color, -1)
         cv2.putText(image, text , (result['bbox']['x_min'], result['bbox']['y_min'] - baseline), cv2.FONT_HERSHEY_DUPLEX, 0.90, (255, 255, 255), 1)
         if 'object_id' in result and centers is not None:
@@ -217,13 +217,19 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
 def load_model(model_path, device):
     core = Core()
     return core.compile_model(model_path, device)
-          
+
+@st.cache_resource
+def load_seg_model(model_path):
+    # Load and return the YOLO model
+    return YOLO(model_path)
+
+
 # Ensure the correct paths to the .xml and .bin files
 model_path = "yolov8c_openvino_model/yolov8c.xml"
 device = "CPU"
 # Load the model
 try:
-    # model = load_model(model_path, device)
+    model = load_model(model_path, device)
     print("Model loaded successfully!")
     st.write("Models loaded successfully!")
           
@@ -232,7 +238,8 @@ except Exception as e:
 
 
 # Cache seg model paths
-model1= YOLO("yolov8xcdark-seg.pt")
+model_seg_path = "yolov8xcdark-seg.pt"
+model1 = load_seg_model(model_seg_path)
 
 
 source = ("Image Detection📸", "Video Detections📽️", "Live Camera Detection🤳🏻","RTSP","MOBILE CAM")
