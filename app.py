@@ -254,7 +254,7 @@ class OpenVINOModel:
         return results  # Ensure compatibility with result_to_json
 
 # Load your OpenVINO model
-model_path = "yolov8c_openvino_model/yolov8c.xml"  # Update with the actual path
+model_path = "yolov8c_openvino_model/"  # Update with the actual path
 model = OpenVINOModel(model_path)
 st.write("Models loaded successfully!")
 
