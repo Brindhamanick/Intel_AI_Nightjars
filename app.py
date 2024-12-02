@@ -228,6 +228,7 @@ def load_seg_model(model_path):
 # Ensure the correct paths to the .xml and .bin files
 model_path = "yolov8x_openvino_model/yolov8c.xml"
 device = "CPU"
+modelop = load_model(model_path, device)
 # Load the model
 try:
     modelop = load_model(model_path, device)
