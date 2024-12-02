@@ -240,7 +240,7 @@ def compile_model(det_model_path, device):
 @st.cache_resource
 def load_openvino_model(model_dir, device):
     # Define paths to OpenVINO files
-    det_model_path = os.path.abspath("yolovc8x_openvino_model/yolovc8x.xml")  # Adjust for your actual file name if necessary
+    det_model_path = os.path.abspath("yolov8c_openvino_model/yolov8c.xml")  # Adjust for your actual file name if necessary
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
@@ -257,7 +257,7 @@ def load_openvino_model(model_dir, device):
 
 # Specify device
 device = "CPU"  # Change as per your environment: "GPU", "AUTO", etc.
-det_model_dir = "yolovc8x_openvino_model/"  # Detection model directory
+det_model_dir = "yolov8c_openvino_model/"  # Detection model directory
 # Load the detection and segmentation models
 # model = load_openvino_model(det_model_dir, device)
 model = YOLO("yolov8xcdark.pt")
