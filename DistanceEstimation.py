@@ -27,9 +27,33 @@ BLACK = (0, 0, 0)
 # Defining fonts
 FONTS = cv.FONT_HERSHEY_PLAIN
 
-# Load the YOLOv8 model
-model_select = "yolov8xcdark.pt"
-model = YOLO(model_select,'conf=0.45')  # You can replace it with 'yolov8-tiny.pt' if you want a smaller version
+
+@st.cache_resource
+def load_model(model_path, device):
+    core = Core()
+    return core.compile_model(model_path, device)
+
+@st.cache_resource
+def load_seg_model(model_path):
+    # Load and return the YOLO model
+    return YOLO(model_path)
+
+
+# Ensure the correct paths to the .xml and .bin files
+model_path = "yolov8x_openvino_model/yolov8c.xml"
+device = "CPU"
+# Load the model
+try:
+    model = load_model(model_path, device)
+    st.write("Optimized Openvino Yolov8c Models loaded successfully!")
+          
+except Exception as e:
+    print(f"Error loading model: {e}")
+
+
+# # Load the YOLOv8 model
+# model_select = "yolov8xcdark.pt"
+# model = YOLO(model_select,'conf=0.45')  # You can replace it with 'yolov8-tiny.pt' if you want a smaller version
 
 # Get class names from the YOLO model
 class_names = model.names
