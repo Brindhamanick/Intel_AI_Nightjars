@@ -207,50 +207,12 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     return video_file_name_out, result_video_json_file
 
 
-# Global OpenVINO core instance
-core = ov.Core()
-
-# Function to compile OpenVINO models
-@st.cache_resource
-def compile_model(det_model_path, device):
-    if not os.path.exists(det_model_path):
-        raise FileNotFoundError(f"Model file not found at: {det_model_path}")
-  
-    det_ov_model = core.read_model(det_model_path)
-    ov_config = {}
-    if device != "CPU":
-        det_ov_model.reshape({0: [1, 3, 640, 640]})
-    if "GPU" in device or ("AUTO" in device and "GPU" in core.available_devices):
-        ov_config = {"GPU_DISABLE_WINOGRAD_CONVOLUTION": "YES"}
-
-    det_compiled_model = core.compile_model(det_ov_model, device, ov_config)
-    return det_compiled_model
-
-# Function to load YOLO model and integrate OpenVINO
-@st.cache_resource
-def load_openvino_model(model_dir, device):
-    det_model_path = os.path.abspath("yolov8c_openvino_model/yolov8c.xml")  
-    compiled_model = compile_model(det_model_path, device)
-
-    # Initialize YOLO with OpenVINO
-    det_model = YOLO("yolov8c_openvino_model/", task="detect")
-
-    if det_model.predictor is None:
-        custom = {"conf": 0.40, "batch": 1, "save": False, "mode": "predict"}  
-        args = {**det_model.overrides, **custom}
-        det_model.predictor = det_model._smart_load("predictor")(overrides=args, _callbacks=det_model.callbacks)
-        det_model.predictor.setup_model(model=det_model.model)
-
-    det_model.predictor.model.ov_compiled_model = compiled_model
-    return det_model
-
-device = "CPU"  
-det_model_dir = "yolov8c_openvino_model" 
-st.write("Exists:", os.path.exists("yolov8c_openvino_model/yolov8c.xml"))
-st.write("Current working directory:", os.getcwd())
-
-# Load the detection and segmentation models
-model = load_openvino_model(det_model_dir, device)
+# Cache model paths
+model_select = "yolov8xcdark.pt"
+# Load models
+model_opti = load_model(model_select)
+model_opti.export(format="openvino") 
+model = YOLO("yolov8xcdark_openvino_model/")
 # model = YOLO("yolov8xcdark.pt")
 st.write("Models loaded successfully!")
 
