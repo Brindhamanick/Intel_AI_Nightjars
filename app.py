@@ -257,7 +257,8 @@ def load_openvino_model(model_dir, device):
 device = "CPU"  # Change as per your environment: "GPU", "AUTO", etc.
 det_model_dir = "yolovc8x_openvino_model/"  # Detection model directory
 # Load the detection and segmentation models
-model = load_openvino_model(det_model_dir, device)
+# model = load_openvino_model(det_model_dir, device)
+model = YOLO("yolov8xcdark.pt")
 st.write("Models loaded successfully!")
 
 # Cache seg model paths
