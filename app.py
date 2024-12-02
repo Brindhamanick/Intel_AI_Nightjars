@@ -222,8 +222,10 @@ core = ov.Core()
 # Function to compile OpenVINO models
 @st.cache_resource
 def compile_model(det_model_path, device):
+    if not os.path.exists(det_model_path):
+        raise FileNotFoundError(f"Model file not found at: {det_model_path}")
+  
     det_ov_model = core.read_model(det_model_path)
-
     # OpenVINO configuration
     ov_config = {}
     if device != "CPU":
@@ -238,7 +240,7 @@ def compile_model(det_model_path, device):
 @st.cache_resource
 def load_openvino_model(model_dir, device):
     # Define paths to OpenVINO files
-    det_model_path = "yolovc8x"  # Adjust for your actual file name if necessary
+    det_model_path = os.path.abspath("yolovc8x_openvino_model/yolovc8x.xml")  # Adjust for your actual file name if necessary
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
