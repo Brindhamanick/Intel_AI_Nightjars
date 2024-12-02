@@ -239,7 +239,7 @@ def compile_model(det_model_path, device):
 @st.cache_resource
 def load_openvino_model(model_dir, device):
     # Define paths to OpenVINO files
-    det_model_path = Path("yolovc8x_openvino_model/yolovc8x.xml")  # Adjust for your actual file name if necessary
+    det_model_path = Path("./yolovc8x_openvino_model/yolovc8x.xml")  # Adjust for your actual file name if necessary
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
@@ -308,276 +308,276 @@ if source_index == 0:
            
  
 
-# # Video & Live cam section
-# if source_index == 1:
+# Video & Live cam section
+if source_index == 1:
 
-#     st.header("Video & Live Cam Processing using YOLOv8")
-#     video_file = st.file_uploader("Upload a video", type=["mp4"])
-#     process_video_button = st.button("Process Video")
-#     if video_file is None and process_video_button:
-#         st.warning("Please upload a video file to be processed!")
-#     if video_file is not None and process_video_button:
-#         with st.spinner(text='Detecting with 💕...'):
-#             tracker = DeepSort(max_age=5)
-#             centers = [deque(maxlen=30) for _ in range(10000)]
-#             open(video_file.name, "wb").write(video_file.read())
-#             video_file_out, result_video_json_file = video_processing(video_file.name, model, tracker=tracker, centers=centers)
-#             os.remove(video_file.name)
-#             # print(json.dumps(result_video_json_file, indent=2))
-#             video_bytes = open(video_file_out, 'rb').read()
-#             st.video(video_bytes)
+    st.header("Video & Live Cam Processing using YOLOv8")
+    video_file = st.file_uploader("Upload a video", type=["mp4"])
+    process_video_button = st.button("Process Video")
+    if video_file is None and process_video_button:
+        st.warning("Please upload a video file to be processed!")
+    if video_file is not None and process_video_button:
+        with st.spinner(text='Detecting with 💕...'):
+            tracker = DeepSort(max_age=5)
+            centers = [deque(maxlen=30) for _ in range(10000)]
+            open(video_file.name, "wb").write(video_file.read())
+            video_file_out, result_video_json_file = video_processing(video_file.name, model, tracker=tracker, centers=centers)
+            os.remove(video_file.name)
+            # print(json.dumps(result_video_json_file, indent=2))
+            video_bytes = open(video_file_out, 'rb').read()
+            st.video(video_bytes)
 
     
 
-# if source_index == 2:
-#     st.header("Live Stream Processing using YOLOv8")
-#     tab_webcam = st.tabs(["Webcam Detections"])
-#     p_time = 0
+if source_index == 2:
+    st.header("Live Stream Processing using YOLOv8")
+    tab_webcam = st.tabs(["Webcam Detections"])
+    p_time = 0
 
-#     st.sidebar.title('Settings')
-#     # Choose the model
-#     model_type = "YOLOv8"
-#     sample_img = cv2.imread('detective.png')
-#     FRAME_WINDOW = st.image(sample_img, channels='BGR')
-#     cap = None
+    st.sidebar.title('Settings')
+    # Choose the model
+    model_type = "YOLOv8"
+    sample_img = cv2.imread('detective.png')
+    FRAME_WINDOW = st.image(sample_img, channels='BGR')
+    cap = None
 
 
-#     if not model_type == 'YOLO Model':
-#         if model_type == 'YOLOv8':
-#             # GPU
-#             gpu_option = st.sidebar.radio(
-#                 'Choose between:', ('CPU', 'GPU'))
-#             # Model
-#             if gpu_option == 'CPU':
-#                 model = model
-#             if gpu_option == 'GPU':
-#                 model = model
+    if not model_type == 'YOLO Model':
+        if model_type == 'YOLOv8':
+            # GPU
+            gpu_option = st.sidebar.radio(
+                'Choose between:', ('CPU', 'GPU'))
+            # Model
+            if gpu_option == 'CPU':
+                model = model
+            if gpu_option == 'GPU':
+                model = model
 
         
 
-#         # Load Class names
-#         class_labels = model.names
+        # Load Class names
+        class_labels = model.names
 
 
-#         # Confidence
-#         confidence = st.sidebar.slider(
-#             'Detection Confidence', min_value=0.0, max_value=1.0, value=0.25)
+        # Confidence
+        confidence = st.sidebar.slider(
+            'Detection Confidence', min_value=0.0, max_value=1.0, value=0.25)
 
-#         # Draw thickness
-#         draw_thick = st.sidebar.slider(
-#             'Draw Thickness:', min_value=1,
-#             max_value=20, value=3
-#         )
+        # Draw thickness
+        draw_thick = st.sidebar.slider(
+            'Draw Thickness:', min_value=1,
+            max_value=20, value=3
+        )
         
-#         # Inference Mode
-#         # Web-cam
+        # Inference Mode
+        # Web-cam
         
-#         cam_options = st.selectbox('Webcam Channel',
-#                                         ('Select Channel', '0', '1', '2', '3'))
+        cam_options = st.selectbox('Webcam Channel',
+                                        ('Select Channel', '0', '1', '2', '3'))
     
-#         if not cam_options == 'Select Channel':
-#             pred = st.checkbox(f'Predict Using {model_type}')
-#             cap = cv2.VideoCapture(int(cam_options))
-#             if (cap != None) and pred:
-#                 stframe1 = st.empty()
-#                 stframe2 = st.empty()
-#                 stframe3 = st.empty()
-#                 tracker = DeepSort(max_age=5)
-#                 centers = [deque(maxlen=30) for _ in range(10000)]
+        if not cam_options == 'Select Channel':
+            pred = st.checkbox(f'Predict Using {model_type}')
+            cap = cv2.VideoCapture(int(cam_options))
+            if (cap != None) and pred:
+                stframe1 = st.empty()
+                stframe2 = st.empty()
+                stframe3 = st.empty()
+                tracker = DeepSort(max_age=5)
+                centers = [deque(maxlen=30) for _ in range(10000)]
                 
                 
-#                 while True:
-#                     success, img = cap.read()
-#                     if not success:
-#                         st.error(
-#                             f" NOT working\nCheck {cam_options} properly!!",
-#                             icon="🚨"
-#                         )
-#                         break
+                while True:
+                    success, img = cap.read()
+                    if not success:
+                        st.error(
+                            f" NOT working\nCheck {cam_options} properly!!",
+                            icon="🚨"
+                        )
+                        break
                               
 
  
-#                     # # Call get_yolo to get detections
-#                     # img, current_no_class = get_yolo(img, model_type, model, confidence, class_labels, draw_thick)
+                    # # Call get_yolo to get detections
+                    # img, current_no_class = get_yolo(img, model_type, model, confidence, class_labels, draw_thick)
 
-#                     # Call DeepSort for tracking
-#                     img, result_list_json = image_processing(img, model, image_viewer=view_result_default, tracker=tracker, centers=centers)
+                    # Call DeepSort for tracking
+                    img, result_list_json = image_processing(img, model, image_viewer=view_result_default, tracker=tracker, centers=centers)
 
-#                     # # Call get_frame_output to overlay distance information
-#                     processed_frame = get_live_frame_output(img, result_list_json)
+                    # # Call get_frame_output to overlay distance information
+                    processed_frame = get_live_frame_output(img, result_list_json)
                     
 
                   
-#                     # Display the processed frame
-#                     FRAME_WINDOW.image(processed_frame, channels='BGR')
-#                     st.cache_data.clear()
+                    # Display the processed frame
+                    FRAME_WINDOW.image(processed_frame, channels='BGR')
+                    st.cache_data.clear()
 
                     
-#                     # FPS
-#                     c_time = time.time()
-#                     fps = 1 / (c_time - p_time)
-#                     p_time = c_time
+                    # FPS
+                    c_time = time.time()
+                    fps = 1 / (c_time - p_time)
+                    p_time = c_time
                         
-#                     # Current number of classes
-#                     # Current number of classes
-#                     detected_classes = [item['class'] for item in result_list_json]
-#                     class_fq = Counter(detected_classes)
-#                     df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
+                    # Current number of classes
+                    # Current number of classes
+                    detected_classes = [item['class'] for item in result_list_json]
+                    class_fq = Counter(detected_classes)
+                    df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
 
-#                         # Updating Inference results
-#                     get_system_stat(stframe1, stframe2, stframe3, fps, df_fq)
+                        # Updating Inference results
+                    get_system_stat(stframe1, stframe2, stframe3, fps, df_fq)
                     
                     
 
 
-# if source_index == 3:
-#     st.header("Live Stream Processing using YOLOv8")
-#     tab_rtsp = st.tabs(["RTSP Detections"])
-#     p_time = 0
+if source_index == 3:
+    st.header("Live Stream Processing using YOLOv8")
+    tab_rtsp = st.tabs(["RTSP Detections"])
+    p_time = 0
 
-#     st.sidebar.title('Settings')
-#     # Choose the model
-#     model_type = "YOLOv8"
-#     sample_img = cv2.imread('detective.png')
-#     FRAME_WINDOW = st.image(sample_img, channels='BGR')
-#     cap = None
+    st.sidebar.title('Settings')
+    # Choose the model
+    model_type = "YOLOv8"
+    sample_img = cv2.imread('detective.png')
+    FRAME_WINDOW = st.image(sample_img, channels='BGR')
+    cap = None
 
-#     if not model_type == 'YOLO Model':
+    if not model_type == 'YOLO Model':
         
-#         if model_type == 'YOLOv8':
-#             # GPU
-#             gpu_option = st.sidebar.radio(
-#                 'Choose between:', ('CPU', 'GPU'))
-
-        
-#             # Model
-#             if gpu_option == 'CPU':
-#                 model = model
-#                 # model = custom(path_or_model=path_model_file)
-#             if gpu_option == 'GPU':
-#                 model = model
-#                 # model = custom(path_or_model=path_model_file, gpu=True)
+        if model_type == 'YOLOv8':
+            # GPU
+            gpu_option = st.sidebar.radio(
+                'Choose between:', ('CPU', 'GPU'))
 
         
+            # Model
+            if gpu_option == 'CPU':
+                model = model
+                # model = custom(path_or_model=path_model_file)
+            if gpu_option == 'GPU':
+                model = model
+                # model = custom(path_or_model=path_model_file, gpu=True)
 
-#         # Load Class names
-#         class_labels = model.names
+        
+
+        # Load Class names
+        class_labels = model.names
 
 
-#         # Confidence
-#         confidence = st.sidebar.slider(
-#             'Detection Confidence', min_value=0.0, max_value=1.0, value=0.25)
+        # Confidence
+        confidence = st.sidebar.slider(
+            'Detection Confidence', min_value=0.0, max_value=1.0, value=0.25)
 
-#         # Draw thickness
-#         draw_thick = st.sidebar.slider(
-#             'Draw Thickness:', min_value=1,
-#             max_value=20, value=3
-#         )
+        # Draw thickness
+        draw_thick = st.sidebar.slider(
+            'Draw Thickness:', min_value=1,
+            max_value=20, value=3
+        )
         
 
 
         
-#         rtsp_url = st.text_input(
-#             'RTSP URL:',
-#             'eg: rtsp://admin:name6666@198.162.1.58/cam/realmonitor?channel=0&subtype=0'
-#         )
-#         pred1 = st.checkbox(f'Predict Using rtsp {model_type}')
-#         cap = cv2.VideoCapture(rtsp_url)
+        rtsp_url = st.text_input(
+            'RTSP URL:',
+            'eg: rtsp://admin:name6666@198.162.1.58/cam/realmonitor?channel=0&subtype=0'
+        )
+        pred1 = st.checkbox(f'Predict Using rtsp {model_type}')
+        cap = cv2.VideoCapture(rtsp_url)
 
-#         if (cap != None) and pred1:
-#                 stframe1 = st.empty()
-#                 stframe2 = st.empty()
-#                 stframe3 = st.empty()
+        if (cap != None) and pred1:
+                stframe1 = st.empty()
+                stframe2 = st.empty()
+                stframe3 = st.empty()
                 
-#                 tracker = DeepSort(max_age=5)
-#                 centers = [deque(maxlen=30) for _ in range(10000)]
+                tracker = DeepSort(max_age=5)
+                centers = [deque(maxlen=30) for _ in range(10000)]
 
-#                 while True:
-#                     success, img = cap.read()
-#                     if not success:
-#                         st.error(
-#                             f" NOT working\nCheck {cam_options} properly!!",
-#                             icon="🚨"
-#                         )
-#                         break
+                while True:
+                    success, img = cap.read()
+                    if not success:
+                        st.error(
+                            f" NOT working\nCheck {cam_options} properly!!",
+                            icon="🚨"
+                        )
+                        break
 
                     
-#                     # Call DeepSort for tracking
-#                     img, result_list_json = image_processing(img, model, image_viewer=view_result_default, tracker=tracker, centers=centers)
+                    # Call DeepSort for tracking
+                    img, result_list_json = image_processing(img, model, image_viewer=view_result_default, tracker=tracker, centers=centers)
 
-#                     # # Call get_frame_output to overlay distance information
-#                     processed_frame = get_live_frame_output(img, result_list_json)
+                    # # Call get_frame_output to overlay distance information
+                    processed_frame = get_live_frame_output(img, result_list_json)
                     
                   
-#                     # Display the processed frame
-#                     FRAME_WINDOW.image(processed_frame, channels='BGR')
+                    # Display the processed frame
+                    FRAME_WINDOW.image(processed_frame, channels='BGR')
 
-#                     # FPS
-#                     c_time = time.time()
-#                     fps = 1 / (c_time - p_time)
-#                     p_time = c_time
+                    # FPS
+                    c_time = time.time()
+                    fps = 1 / (c_time - p_time)
+                    p_time = c_time
                         
-#                     # Current number of classes
-#                     detected_classes = [item['class'] for item in result_list_json]
-#                     class_fq = Counter(detected_classes)
-#                     df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
+                    # Current number of classes
+                    detected_classes = [item['class'] for item in result_list_json]
+                    class_fq = Counter(detected_classes)
+                    df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
                    
-#                         # Updating Inference results
-#                     get_system_stat(stframe1, stframe2, stframe3, fps, df_fq)
+                        # Updating Inference results
+                    get_system_stat(stframe1, stframe2, stframe3, fps, df_fq)
                                     
                     
 
 
-# class VideoTransformer(VideoTransformerBase):
-#     def __init__(self) -> None:
-#         super().__init__()
-#         self.frame_count = 0
-#         self.tracker = DeepSort(max_age=5)  # Initialize the DeepSort tracker
-#         self.centers = [deque(maxlen=30) for _ in range(10000)]  # Initialize centers deque
+class VideoTransformer(VideoTransformerBase):
+    def __init__(self) -> None:
+        super().__init__()
+        self.frame_count = 0
+        self.tracker = DeepSort(max_age=5)  # Initialize the DeepSort tracker
+        self.centers = [deque(maxlen=30) for _ in range(10000)]  # Initialize centers deque
 
-#     def transform(self, frame):
-#         img = frame.to_ndarray(format="bgr24")
+    def transform(self, frame):
+        img = frame.to_ndarray(format="bgr24")
         
-#         # Process the frame using image_processing
-#         img, result_list_json = image_processing(img, model, image_viewer=view_result_default, tracker=self.tracker, centers=self.centers)
+        # Process the frame using image_processing
+        img, result_list_json = image_processing(img, model, image_viewer=view_result_default, tracker=self.tracker, centers=self.centers)
         
-#         # Call get_frame_output to overlay distance information
-#         processed_frame = get_live_frame_output(img, result_list_json)
+        # Call get_frame_output to overlay distance information
+        processed_frame = get_live_frame_output(img, result_list_json)
         
-#         return processed_frame
+        return processed_frame
 
-#     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
-#         new_image = self.transform(frame)
-#         return av.VideoFrame.from_ndarray(new_image, format="bgr24")
+    def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+        new_image = self.transform(frame)
+        return av.VideoFrame.from_ndarray(new_image, format="bgr24")
 
 
-# # Streamlit application
-# if source_index == 4:
-#     st.header("Live Stream Processing using YOLOv8")
-#     webcam_st = st.tabs(["St webcam"])
-#     p_time = 0
+# Streamlit application
+if source_index == 4:
+    st.header("Live Stream Processing using YOLOv8")
+    webcam_st = st.tabs(["St webcam"])
+    p_time = 0
 
-#     # RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
+    # RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
 
-#     RTC_CONFIGURATION = RTCConfiguration({
-#               "iceServers": [
-#                   {"urls": ["stun:openrelay.metered.ca:80"]},  # Free public STUN server
-#                   {"urls": ["turn:openrelay.metered.ca:80"], "username": "user", "credential": "pass"}  # Example TURN server
-#               ]
-#           })
+    RTC_CONFIGURATION = RTCConfiguration({
+              "iceServers": [
+                  {"urls": ["stun:openrelay.metered.ca:80"]},  # Free public STUN server
+                  {"urls": ["turn:openrelay.metered.ca:80"], "username": "user", "credential": "pass"}  # Example TURN server
+              ]
+          })
           
-#     count = st_autorefresh(interval=4500, limit=1000000, key="fizzbuzzcounter")
-#     try:
-#       webrtc_streamer(
-#         key="test",
-#         media_stream_constraints={"video": True, "audio": False},
-#         video_processor_factory=VideoTransformer
-#     )
-#     except Exception as e:
-#       st.error(f"Error initializing WebRTC: {e}")
-#     # webrtc_streamer(
-#     #     key="test",
-#     #     media_stream_constraints={"video": True, "audio": False},
-#     #     video_processor_factory=VideoTransformer
-#     # )
-#     st.cache_data.clear()
+    count = st_autorefresh(interval=4500, limit=1000000, key="fizzbuzzcounter")
+    try:
+      webrtc_streamer(
+        key="test",
+        media_stream_constraints={"video": True, "audio": False},
+        video_processor_factory=VideoTransformer
+    )
+    except Exception as e:
+      st.error(f"Error initializing WebRTC: {e}")
+    # webrtc_streamer(
+    #     key="test",
+    #     media_stream_constraints={"video": True, "audio": False},
+    #     video_processor_factory=VideoTransformer
+    # )
+    st.cache_data.clear()
