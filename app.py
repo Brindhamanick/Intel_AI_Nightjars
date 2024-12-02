@@ -161,8 +161,20 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
         result_image: result image with bounding boxes, class names, confidence scores, object masks, and possibly object IDs
         result_list_json: detection result in json format
     """
-    st.image(frame)
-    results = model.predict(frame)
+    
+          
+    gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    denoised_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
+    equalized_image = cv2.equalizeHist(denoised_image)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    enhanced_image = clahe.apply(equalized_image)
+    image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
+    kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+    sharpened_image = cv2.filter2D(image, -1, kernel)
+    gamma_corrected_image = adjust_gamma(sharpened_image, gamma=1.5)
+    processed_image = gamma_corrected_image
+           
+    results = model.predict(processed_image)
     result_list_json = result_to_json(results[0], tracker=tracker)
     result_image = image_viewer(results[0], result_list_json, centers=centers)
     return result_image, result_list_json
@@ -264,15 +276,11 @@ if source_index == 0:
             st.sidebar.image(image_file, caption="Uploaded image")
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
             
-            gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            image = cv2.equalizeHist(gray_image)
-            image = cv2.merge([image, image, image])  #
             # For detection with bounding boxes
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
-            st.image(image, caption="Grayscale image", channels="BGR")   
+           
             
-            img, result_list_json = image_processing(image, model)
-            st.write(f"Model: {modelop}")
+            img, result_list_json = image_processing(img, model)
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             
