@@ -166,7 +166,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     result_image = image_viewer(results[0], result_list_json, centers=centers)
     return result_image, result_list_json
 
-# @st.cache_data
+
 def video_processing(video_file, model, image_viewer=view_result_default, tracker=None, centers=None):
     """
     Process video file using ultralytics YOLOv8 model and possibly DeepSort tracker if it is provided
@@ -207,14 +207,6 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     os.remove(temp_file)
     return video_file_name_out, result_video_json_file
 
-# core = ov.Core()
-
-# st.set_page_config(page_title="NightJars YOLOv8 ", layout="wide", page_icon="detective.ico")
-# st.title("Intel Custom YOLOv8 Dark Object Detection 📸🕵🏻‍♀️")
-# model_path = "yolovc8x_openvino_model/" 
-# compiled_model = core.compile_model("yolovc8x_openvino_model/yolovc8x.xml")
-
-# model = YOLO(compiled_model)
 
 # Global OpenVINO core instance
 core = ov.Core()
@@ -226,7 +218,6 @@ def compile_model(det_model_path, device):
         raise FileNotFoundError(f"Model file not found at: {det_model_path}")
   
     det_ov_model = core.read_model(det_model_path)
-    # OpenVINO configuration
     ov_config = {}
     if device != "CPU":
         det_ov_model.reshape({0: [1, 3, 640, 640]})
@@ -239,15 +230,14 @@ def compile_model(det_model_path, device):
 # Function to load YOLO model and integrate OpenVINO
 @st.cache_resource
 def load_openvino_model(model_dir, device):
-    # Define paths to OpenVINO files
-    det_model_path = os.path.abspath("yolov8c_openvino_model/yolov8c.xml")  # Adjust for your actual file name if necessary
+    det_model_path = os.path.abspath("yolov8c_openvino_model/yolov8c.xml")  
     compiled_model = compile_model(det_model_path, device)
 
     # Initialize YOLO with OpenVINO
     det_model = YOLO(model_dir, task="detect")
 
     if det_model.predictor is None:
-        custom = {"conf": 0.25, "batch": 1, "save": False, "mode": "predict"}  # Default arguments
+        custom = {"conf": 0.40, "batch": 1, "save": False, "mode": "predict"}  
         args = {**det_model.overrides, **custom}
         det_model.predictor = det_model._smart_load("predictor")(overrides=args, _callbacks=det_model.callbacks)
         det_model.predictor.setup_model(model=det_model.model)
@@ -255,12 +245,11 @@ def load_openvino_model(model_dir, device):
     det_model.predictor.model.ov_compiled_model = compiled_model
     return det_model
 
-# Specify device
-device = "CPU"  # Change as per your environment: "GPU", "AUTO", etc.
-det_model_dir = "yolov8c_openvino_model/"  # Detection model directory
+device = "CPU"  
+det_model_dir = "yolov8c_openvino_model/" 
 # Load the detection and segmentation models
-# model = load_openvino_model(det_model_dir, device)
-model = YOLO("yolov8xcdark.pt")
+model = load_openvino_model(det_model_dir, device)
+# model = YOLO("yolov8xcdark.pt")
 st.write("Models loaded successfully!")
 
 # Cache seg model paths
