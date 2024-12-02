@@ -207,17 +207,22 @@ def video_processing(video_file, model, image_viewer=view_result_default, tracke
     return video_file_name_out, result_video_json_file
 
 
+@st.cache_resource
+def load_model(model_path, device):
+    core = Core()
+    return core.compile_model(model_path, device)
+          
 # Ensure the correct paths to the .xml and .bin files
 model_path = "yolov8c_openvino_model/yolov8c.xml"
-
+device = "CPU"
 # Load the model
-core = Core()
 try:
-    model = core.compile_model(model_path, "CPU")
+    model = load_model(model_path, device)
     print("Model loaded successfully!")
+    st.write("Models loaded successfully!")
+          
 except Exception as e:
     print(f"Error loading model: {e}")
-st.write("Models loaded successfully!")
 
 
 # Cache seg model paths
