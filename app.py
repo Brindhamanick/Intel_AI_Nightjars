@@ -169,9 +169,9 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
     enhanced_image = clahe.apply(equalized_image)
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
-    kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
-    sharpened_image = cv2.filter2D(image, -1, kernel)
-    processed_image = sharpened_image
+    # kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+    # sharpened_image = cv2.filter2D(image, -1, kernel)
+    processed_image = image
            
     results = model.predict(processed_image)
     result_list_json = result_to_json(results[0], tracker=tracker)
