@@ -1,4 +1,3 @@
-
 import os
 os.environ["MY_ENV_VARIABLE"] = "True"
 import cv2
@@ -266,7 +265,7 @@ def load_seg_model(model_path):
 device = "CPU"
 model_path = '/content/Intel_AI_Nightjars/yolov8xcdark.pt' 
 modelop = load_model(model_path, device)
-    st.write("Optimized Openvino Yolov8c Models loaded successfully!")
+st.write("Optimized Openvino Yolov8c Models loaded successfully!")
 # Load the model
 try:
     modelop = load_model(model_path, device)
