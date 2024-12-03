@@ -306,6 +306,7 @@ if source_index == 0:
            
             
             img, result_list_json = image_processing(img, modelop)
+            st.info(modelop)
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             
