@@ -264,7 +264,7 @@ def load_seg_model(model_path):
 # model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
 model_path = 'yolov8c_openvino_model/yolov8c.xml' 
-modelop = load_model(model_path, device)
+modelop = YOLO(model_path)
 st.write("Optimized Openvino Yolov8c Models loaded successfully!")
 # Load the model
 try:
