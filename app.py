@@ -23,7 +23,8 @@ from tts import *
 import torch
 import intel_extension_for_pytorch as ipex
 from pathlib import Path
-from openvino.runtime import Core
+# from openvino.runtime import Core
+import openvino as ov
 
 
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
@@ -232,8 +233,15 @@ st.image("assets/nmainlogoo.png")
 
 @st.cache_resource
 def load_model(model_path, device):
-    core = Core()
-    return core.compile_model(model_path, device)
+    core = ov.Core()
+    ov_model = core.read_model(model_path)
+    ov_config = {}
+    if device.value != "CPU":
+        ov_model.reshape({0: [1, 3, 1024, 1024]})
+    if "GPU" in device.value or ("AUTO" in device.value and "GPU" in core.available_devices):
+        ov_config = {"GPU_DISABLE_WINOGRAD_CONVOLUTION": "YES"}
+    compiled_ov_model = core.compile_model(ov_model, device.value, ov_config)
+    return compiled_ov_model
 
 @st.cache_resource
 def load_seg_model(model_path):
@@ -242,7 +250,7 @@ def load_seg_model(model_path):
 
 
 # Ensure the correct paths to the .xml and .bin files
-model_path = "yolov8x_openvino_model/yolov8c.xml"
+model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
 
 # Load the model
