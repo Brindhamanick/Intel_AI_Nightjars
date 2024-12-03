@@ -2,7 +2,7 @@ import os
 os.environ["MY_ENV_VARIABLE"] = "True"
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
-import modin.pandas as pd
+import pandas as pd
 import numpy as np
 
 import cv2
