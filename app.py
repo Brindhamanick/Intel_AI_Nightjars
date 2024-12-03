@@ -56,11 +56,6 @@ def result_to_json(result: Results, tracker=None):
                 'y_min': int(result.boxes.xyxy[idx][1]),
                 'x_max': int(result.boxes.xyxy[idx][2]),
                 'y_max': int(result.boxes.xyxy[idx][3]),
-                
-                # 'x_min': int(result.boxes.boxes[idx][0]),
-                # 'y_min': int(result.boxes.boxes[idx][1]),
-                # 'x_max': int(result.boxes.boxes[idx][2]),
-                # 'y_max': int(result.boxes.boxes[idx][3]),
             },
         } for idx in range(len_results)
     ]
@@ -245,29 +240,17 @@ def load_model(model_path, device):
     return compiled_ov_model
 
 @st.cache_resource
-def load_seg_model(model_path):
+def load_model(model_path, conf = 0.40):
     # Load and return the YOLO model
-    return YOLO(model_path)
+    return YOLO(model_path, conf = conf)
 
 
-# Ensure the correct paths to the .xml and .bin files
-# model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
-model_path = 'yolov8c_openvino_model/yolov8c.xml' 
-modelop = YOLO("yolov8c_openvino_model")
+model_path = "yolov8c_openvino_model" 
+model_seg_path = "yolov8c-seg_openvino_model"
+model = load_model(model_path)
 st.write("Optimized Openvino Yolov8c Models loaded successfully!")
-# Load the model
-try:
-    modelop = load_model(model_path, device)
-    st.write("Optimized Openvino!")
-          
-except Exception as e:
-    print(f"Error loading model: {e}")
-
-
-# Cache seg model paths
-model_seg_path = "yolov8xcdark-seg.pt"
-model1 = load_seg_model(model_seg_path)
+model1 = load_model(model_seg_path)
 
 
 source = ("Image Detection📸", "Video Detections📽️", "Live Camera Detection🤳🏻","RTSP","MOBILE CAM")
@@ -295,7 +278,7 @@ if source_index == 0:
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
            
             
-            img, result_list_json = image_processing(img, modelop)
+            img, result_list_json = image_processing(img, model)
             st.info(modelop)
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
