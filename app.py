@@ -227,22 +227,22 @@ st.image("assets/nmainlogoo.png")
 
 
 
-@st.cache_resource
-def load_model(model_path, device):
-    core = ov.Core()
-    ov_model = core.read_model(model_path)
-    ov_config = {}
-    if device.value != "CPU":
-        ov_model.reshape({0: [1, 3, 1024, 1024]})
-    if "GPU" in device.value or ("AUTO" in device.value and "GPU" in core.available_devices):
-        ov_config = {"GPU_DISABLE_WINOGRAD_CONVOLUTION": "YES"}
-    compiled_ov_model = core.compile_model(ov_model, device.value, ov_config)
-    return compiled_ov_model
+# @st.cache_resource
+# def load_model(model_path, device):
+#     core = ov.Core()
+#     ov_model = core.read_model(model_path)
+#     ov_config = {}
+#     if device.value != "CPU":
+#         ov_model.reshape({0: [1, 3, 1024, 1024]})
+#     if "GPU" in device.value or ("AUTO" in device.value and "GPU" in core.available_devices):
+#         ov_config = {"GPU_DISABLE_WINOGRAD_CONVOLUTION": "YES"}
+#     compiled_ov_model = core.compile_model(ov_model, device.value, ov_config)
+#     return compiled_ov_model
 
 @st.cache_resource
-def load_model(model_path, conf = 0.40):
+def load_model(model_path):
     # Load and return the YOLO model
-    return YOLO(model_path, conf = conf)
+    return YOLO(model_path, 'conf=0.40')
 
 
 device = "CPU"
@@ -273,10 +273,6 @@ if source_index == 0:
             st.sidebar.success("Successfully uploaded")
             st.sidebar.image(image_file, caption="Uploaded image")
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
-            
-            # For detection with bounding boxes
-            # print(f"Used Custom reframed YOLOv8 model: {model_select}")
-           
             
             img, result_list_json = image_processing(img, model)
             st.info(modelop)
