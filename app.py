@@ -176,16 +176,6 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     enhanced_image = clahe.apply(equalized_image)
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
     processed_image = image
-
-    # Create an inference request
-    # infer_request = model.create_infer_request()
-
-    # # Prepare input data and set it to the inference request
-    # input_tensor = ov.Tensor(processed_image) # Assuming 'frame' is your input image
-    # infer_request.set_input_tensor(input_tensor)
-
-    # # Perform inference
-    # infer_request.infer()
           
     st.image(processed_image, caption="Processed image", channels="BGR")
              
@@ -264,7 +254,7 @@ def load_seg_model(model_path):
 # model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
 model_path = 'yolov8c_openvino_model/yolov8c.xml' 
-modelop = YOLO("yolov8xcdark_openvino_model")
+modelop = YOLO("yolov8c_openvino_model")
 st.write("Optimized Openvino Yolov8c Models loaded successfully!")
 # Load the model
 try:
