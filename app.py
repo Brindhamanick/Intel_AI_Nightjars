@@ -1,33 +1,35 @@
 import os
 os.environ["MY_ENV_VARIABLE"] = "True"
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
+import modin.pandas as pd
+import numpy as np
+
 import cv2
 import json
 import subprocess
-import numpy as np
-import pandas as pd
-from _collections import deque
+
 from deep_sort_realtime.deepsort_tracker import DeepSort
+from _collections import deque
 from stqdm import stqdm
 from collections import Counter
 import time
+
+import streamlit as st
 from ultralytics import YOLO
 from ultralytics.engine.results import Results
-import json
 from model_utils import get_yolo, get_system_stat
 from streamlit_webrtc import RTCConfiguration, VideoTransformerBase, webrtc_streamer
 from DistanceEstimation import *
 from streamlit_autorefresh import st_autorefresh
-import streamlit as st
+
 import av
-from tts import *
 import torch
 import intel_extension_for_pytorch as ipex
 from pathlib import Path
-# from openvino.runtime import Core
 import openvino as ov
 
 
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 # colors for visualization for image visualization
 COLORS = [(56, 56, 255), (151, 157, 255), (31, 112, 255), (29, 178, 255), (49, 210, 207), (10, 249, 72), (23, 204, 146),
