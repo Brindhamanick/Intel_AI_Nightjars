@@ -178,14 +178,14 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     processed_image = image
 
     # Create an inference request
-    infer_request = model.create_infer_request()
+    # infer_request = model.create_infer_request()
 
-    # Prepare input data and set it to the inference request
-    input_tensor = ov.Tensor(processed_image) # Assuming 'frame' is your input image
-    infer_request.set_input_tensor(input_tensor)
+    # # Prepare input data and set it to the inference request
+    # input_tensor = ov.Tensor(processed_image) # Assuming 'frame' is your input image
+    # infer_request.set_input_tensor(input_tensor)
 
-    # Perform inference
-    infer_request.infer()
+    # # Perform inference
+    # infer_request.infer()
           
     st.image(processed_image, caption="Processed image", channels="BGR")
              
@@ -269,7 +269,7 @@ st.write("Optimized Openvino Yolov8c Models loaded successfully!")
 # Load the model
 try:
     modelop = load_model(model_path, device)
-    st.write("Optimized Openvino Yolov8c Models loaded successfully!")
+    st.write("Optimized Openvino!")
           
 except Exception as e:
     print(f"Error loading model: {e}")
