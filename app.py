@@ -244,7 +244,7 @@ st.image("assets/nmainlogoo.png")
 @st.cache_resource
 def load_model(model_path):
     # Load and return the YOLO model
-    return YOLO(model_path, 'conf=0.40')
+    return YOLO(model_path)
 
 
 device = "CPU"
@@ -252,7 +252,7 @@ model_path = "yolov8c_openvino_model"
 model_seg_path = "yolov8c-seg_openvino_model"
 model = YOLO("yolov8c_openvino_model")
 st.write("Optimized Openvino Yolov8c Models loaded successfully!")
-model1 = load_model(model_seg_path)
+model_seg = load_model(model_seg_path)
 
 
 source = ("Image Detection📸", "Video Detections📽️", "Live Camera Detection🤳🏻","RTSP","MOBILE CAM")
@@ -262,7 +262,7 @@ source_index = st.sidebar.selectbox("Select Input type", range(
 
 # Image detection section
 if source_index == 0:
-    st.header("Image Processing using YOLOv8")
+    st.header("Image Processing using YOLOv8c Dark Detector")
     image_file = st.file_uploader("Upload an image 🔽", type=["jpg", "jpeg", "png"])
     process_image_button = st.button("Detect")
     process_seg_button = st.button("Click here for Segmentation result")
@@ -296,7 +296,7 @@ if source_index == 0:
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1) 
            
             ## for detection with bb & segmentation masks
-            img, result_list_json = image_processing(img, modelop)
+            img, result_list_json = image_processing(img, model_seg)
             st.success("✅ Task Segment: Segmentation using v8 model")
             st.image(img, caption="Segmented image", channels="BGR")
 
@@ -312,7 +312,7 @@ if source_index == 0:
 # Video & Live cam section
 if source_index == 1:
 
-    st.header("Video & Live Cam Processing using YOLOv8")
+    st.header("Video Detections using YOLOv8c Dark Detector")
     video_file = st.file_uploader("Upload a video", type=["mp4"])
     process_video_button = st.button("Process Video")
     if video_file is None and process_video_button:
@@ -339,7 +339,7 @@ if source_index == 1:
     
 
 if source_index == 2:
-    st.header("Live Stream Processing using YOLOv8")
+    st.header("Live Stream Processing using YOLOv8c Dark Detector")
     tab_webcam = st.tabs(["Webcam Detections"])
     p_time = 0
 
@@ -440,7 +440,7 @@ if source_index == 2:
 
 
 if source_index == 3:
-    st.header("Live Stream Processing using YOLOv8")
+    st.header("Live Stream Processing using YOLOv8c Dark Detector")
     tab_rtsp = st.tabs(["RTSP Detections"])
     p_time = 0
 
@@ -562,7 +562,7 @@ class VideoTransformer(VideoTransformerBase):
 
 # Streamlit application
 if source_index == 4:
-    st.header("Live Stream Processing using YOLOv8")
+    st.header("Live Stream Processing using YOLOv8c Dark Detector")
     webcam_st = st.tabs(["St webcam"])
     p_time = 0
 
