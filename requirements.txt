@@ -14,6 +14,7 @@ torch
 intel-extension-for-pytorch 
 openvino
 openvino-dev
+modin[all]
 
 # Base ----------------------------------------
 av
