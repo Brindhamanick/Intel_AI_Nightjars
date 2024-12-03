@@ -164,8 +164,7 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     Returns:
         result_image: result image with bounding boxes, class names, confidence scores, object masks, and possibly object IDs
         result_list_json: detection result in json format
-    """
-    
+    """    
     # Preserve the original image for visualization
     original_image = frame.copy()
           
@@ -175,8 +174,8 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     clahe = cv2.createCLAHE(clipLimit=0.5, tileGridSize=(8, 8))
     enhanced_image = clahe.apply(equalized_image)
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
-    
     processed_image = image
+          
     st.image(processed_image, caption="Processed image", channels="BGR")
              
     results = model.predict(processed_image)
