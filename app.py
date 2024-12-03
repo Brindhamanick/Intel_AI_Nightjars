@@ -1,3 +1,4 @@
+%%writefile app.py
 import os
 os.environ["MY_ENV_VARIABLE"] = "True"
 import cv2
@@ -176,10 +177,21 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
     enhanced_image = clahe.apply(equalized_image)
     image = cv2.merge([enhanced_image, enhanced_image, enhanced_image])    
     processed_image = image
+
+    # Create an inference request
+    infer_request = model.create_infer_request()
+
+    # Prepare input data and set it to the inference request
+    input_tensor = ov.Tensor(processed_image) # Assuming 'frame' is your input image
+    infer_request.set_input_tensor(input_tensor)
+
+    # Perform inference
+    infer_request.infer()
           
     st.image(processed_image, caption="Processed image", channels="BGR")
              
-    results = model.predict(processed_image)
+    # results = model.predict(processed_image)
+    results = infer_request.get_output_tensor().data 
     result_list_json = result_to_json(results[0], tracker=tracker)
     result_image = image_viewer(results[0], result_list_json, centers=centers, image=original_image)
     return result_image, result_list_json
@@ -250,8 +262,9 @@ def load_seg_model(model_path):
 
 
 # Ensure the correct paths to the .xml and .bin files
-model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
+# model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
+model_path = '/content/Intel_AI_Nightjars/yolov8xcdark.pt' 
 
 # Load the model
 try:
@@ -292,7 +305,7 @@ if source_index == 0:
             # print(f"Used Custom reframed YOLOv8 model: {model_select}")
            
             
-            img, result_list_json = image_processing(img, model)
+            img, result_list_json = image_processing(img, modelop)
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             
