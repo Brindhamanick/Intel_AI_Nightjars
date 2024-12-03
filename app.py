@@ -264,7 +264,7 @@ def load_seg_model(model_path):
 # model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
 model_path = 'yolov8c_openvino_model/yolov8c.xml' 
-modelop = YOLO("yolov8c_openvino_model")
+modelop = YOLO("yolov8xcdark_openvino_model")
 st.write("Optimized Openvino Yolov8c Models loaded successfully!")
 # Load the model
 try:
@@ -306,6 +306,7 @@ if source_index == 0:
            
             
             img, result_list_json = image_processing(img, modelop)
+            st.info(modelop)
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             
