@@ -312,7 +312,7 @@ if source_index == 0:
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1) 
            
             ## for detection with bb & segmentation masks
-            img, result_list_json = image_processing(img, model1)
+            img, result_list_json = image_processing(img, modelop)
             st.success("✅ Task Segment: Segmentation using v8 model")
             st.image(img, caption="Segmented image", channels="BGR")
 
