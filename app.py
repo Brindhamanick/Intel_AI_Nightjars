@@ -189,8 +189,8 @@ def image_processing(frame, model, image_viewer=view_result_default, tracker=Non
           
     st.image(processed_image, caption="Processed image", channels="BGR")
              
-    # results = model.predict(processed_image)
-    results = infer_request.get_output_tensor().data 
+    results = model.predict(processed_image)
+    # results = infer_request.get_output_tensor().data 
     result_list_json = result_to_json(results[0], tracker=tracker)
     result_image = image_viewer(results[0], result_list_json, centers=centers, image=original_image)
     return result_image, result_list_json
@@ -264,7 +264,7 @@ def load_seg_model(model_path):
 # model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
 model_path = 'yolov8c_openvino_model/yolov8c.xml' 
-modelop = YOLO(model_path)
+modelop = YOLO("https://drive.google.com/drive/folders/18mAuCJAVxp5CZ4R3sc3hDf5DLKdDpc2i?usp=sharing")
 st.write("Optimized Openvino Yolov8c Models loaded successfully!")
 # Load the model
 try:
