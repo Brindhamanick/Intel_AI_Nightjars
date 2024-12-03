@@ -263,7 +263,7 @@ def load_seg_model(model_path):
 # Ensure the correct paths to the .xml and .bin files
 # model_path = Path(f"yolov8x_openvino_model/yolov8c.xml")
 device = "CPU"
-model_path = '/content/Intel_AI_Nightjars/yolov8xcdark.pt' 
+model_path = 'yolov8c_openvino_model/yolov8c.xml' 
 modelop = load_model(model_path, device)
 st.write("Optimized Openvino Yolov8c Models loaded successfully!")
 # Load the model
