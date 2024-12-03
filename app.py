@@ -275,14 +275,13 @@ if source_index == 0:
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), 1)
             
             img, result_list_json = image_processing(img, model)
-            st.info(modelop)
+          
             st.success("✅ Task Detect : Detection using custom-trained v8 model")
             st.image(img, caption="Detected image", channels="BGR")     
             
             detected_classes = [item['class'] for item in result_list_json]
             class_fq = Counter(detected_classes)
             
-            # Create a DataFrame for class frequency
             df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
           
             st.write("Class Frequency:")
@@ -302,9 +301,8 @@ if source_index == 0:
             detected_classes = [item['class'] for item in result_list_json]
             class_fq = Counter(detected_classes)
             
-            # Create a DataFrame for class frequency
+            
             df_fq = pd.DataFrame(class_fq.items(), columns=['Class', 'Number'])
-          
             st.write("Class Frequency:")
             st.dataframe(df_fq)  
  
